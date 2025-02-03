@@ -69,6 +69,7 @@ cd API-Livres
 From the project root directory, run:
 
 ```bash
+cd books-api
 uvicorn app.main:app --reload
 ```
 
