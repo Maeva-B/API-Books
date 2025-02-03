@@ -7,7 +7,7 @@ app = FastAPI(
     version="1.0.0"
 )
 
-# Endpoint de test pour vérifier que l'API fonctionne
+# Test endpoint to verify that the API is working
 @app.get("/")
 def read_root():
     return {"message": "API is up and running!"}
