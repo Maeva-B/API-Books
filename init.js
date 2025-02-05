@@ -14,3 +14,30 @@ db.authors.insertMany([
   { first_name: "Ernest", last_name: "Hemingway", email: "hemingway@example.com", nationality: "American" },
   { first_name: "Mark", last_name: "Twain", email: "twain@example.com", nationality: "American" }
 ])
+
+db.adherents.insertMany([
+  { 
+    first_name: "Alice", 
+    last_name: "Smith", 
+    membership_number: "MEM001", 
+    login: "asmith", 
+    password: "hashed_password1", 
+    role: "professor" 
+  },
+  { 
+    first_name: "Bob", 
+    last_name: "Brown", 
+    membership_number: "MEM002", 
+    login: "bbrown", 
+    password: "hashed_password2", 
+    role: "librarian" 
+  },
+  { 
+    first_name: "Charlie", 
+    last_name: "Davis", 
+    membership_number: "MEM003", 
+    login: "cdavis", 
+    password: "hashed_password3", 
+    role: "student" 
+  }
+]);

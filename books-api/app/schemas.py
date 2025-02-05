@@ -1,6 +1,7 @@
 from bson import ObjectId
 from pydantic import BaseModel, Field
 from typing import Optional
+from enum import Enum
 
 
 class PyObjectId(ObjectId):
@@ -48,6 +49,34 @@ class BookCreate(BookBase):
 class Book(BookBase):
     id: Optional[PyObjectId] = Field(alias="_id")
     author_id: str
+
+    class Config:
+        allow_population_by_field_name = True
+        arbitrary_types_allowed = True
+        json_encoders = {ObjectId: str}
+        
+
+# Enum for the adherent role
+class RoleEnum(str, Enum):
+    professor = "professor"
+    librarian = "librarian"
+    student = "student" 
+        
+
+# Schemas for adherents (members)
+class AdherentBase(BaseModel):
+    first_name: str
+    last_name: str
+    membership_number: str
+    login: str
+    password: str  # Hashed password !!!!
+    role: RoleEnum
+
+class AdherentCreate(AdherentBase):
+    pass
+
+class Adherent(AdherentBase):
+    id: Optional[PyObjectId] = Field(alias="_id")
 
     class Config:
         allow_population_by_field_name = True
