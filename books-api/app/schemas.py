@@ -1,7 +1,25 @@
-from pydantic import BaseModel
+from bson import ObjectId
+from pydantic import BaseModel, Field
 from typing import Optional
 
-# Schemes for authors
+
+class PyObjectId(ObjectId):
+    @classmethod
+    def __get_validators__(cls):
+        yield cls.validate
+
+    @classmethod
+    def validate(cls, v, info):
+        if not ObjectId.is_valid(v):
+            raise ValueError("Invalid ObjectId")
+        return ObjectId(v)
+
+    @classmethod
+    def __get_pydantic_json_schema__(cls, core_schema, handler):
+        return {"type": "string"}
+
+
+# Schemas for authors
 class AuthorBase(BaseModel):
     name: str
 
@@ -9,22 +27,26 @@ class AuthorCreate(AuthorBase):
     pass
 
 class Author(AuthorBase):
-    id: int
+    id: Optional[PyObjectId] = Field(alias="_id")
 
     class Config:
-        orm_mode = True
+        allow_population_by_field_name = True
+        arbitrary_types_allowed = True
+        json_encoders = {ObjectId: str}
 
-# Schemes for books
+# Schemas for books
 class BookBase(BaseModel):
     title: str
     description: Optional[str] = None
 
 class BookCreate(BookBase):
-    author_id: int
+    author_id: str
 
 class Book(BookBase):
-    id: int
-    author_id: int
+    id: Optional[PyObjectId] = Field(alias="_id")
+    author_id: str
 
     class Config:
-        orm_mode = True
+        allow_population_by_field_name = True
+        arbitrary_types_allowed = True
+        json_encoders = {ObjectId: str}

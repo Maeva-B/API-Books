@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-# from app.endpoints import books, authors
+from app.endpoints import books
 
 app = FastAPI(
     title="Books API",
@@ -7,13 +7,7 @@ app = FastAPI(
     version="1.0.0"
 )
 
-# Test endpoint to verify that the API is working
-@app.get("/")
-def read_root():
-    return {"message": "API is up and running!"}
-
-# app.include_router(books.router, prefix="/books", tags=["Books"])
-# app.include_router(authors.router, prefix="/authors", tags=["Authors"])
+app.include_router(books.router, prefix="/books", tags=["Books"])
 
 if __name__ == "__main__":
     import uvicorn
