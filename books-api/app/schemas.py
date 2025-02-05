@@ -21,7 +21,10 @@ class PyObjectId(ObjectId):
 
 # Schemas for authors
 class AuthorBase(BaseModel):
-    name: str
+    first_name: str
+    last_name: str
+    email: str
+    nationality: str
 
 class AuthorCreate(AuthorBase):
     pass

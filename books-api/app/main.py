@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from app.endpoints import books
+from app.endpoints import books, authors
 
 app = FastAPI(
     title="Books API",
@@ -8,6 +8,7 @@ app = FastAPI(
 )
 
 app.include_router(books.router, prefix="/books", tags=["Books"])
+app.include_router(authors.router, prefix="/authors", tags=["Authors"])
 
 if __name__ == "__main__":
     import uvicorn

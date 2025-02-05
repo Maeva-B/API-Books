@@ -9,3 +9,4 @@ client = motor.motor_asyncio.AsyncIOMotorClient(MONGO_DETAILS)
 database = client.books_api
 
 books_collection = database.get_collection("books")
+authors_collection = database.get_collection("authors")

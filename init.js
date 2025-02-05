@@ -9,6 +9,8 @@ db.books.insertMany([
 
 // Insert multiple documents into the “authors” collection
 db.authors.insertMany([
-  { name: "Antoine de Saint-Exupéry" },
-  { name: "George Orwell" }
-]);
+  { first_name: "George", last_name: "Orwell", email: "orwell@example.com", nationality: "British" },
+  { first_name: "Jane", last_name: "Austen", email: "austen@example.com", nationality: "British" },
+  { first_name: "Ernest", last_name: "Hemingway", email: "hemingway@example.com", nationality: "American" },
+  { first_name: "Mark", last_name: "Twain", email: "twain@example.com", nationality: "American" }
+])
