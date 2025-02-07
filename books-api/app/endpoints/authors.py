@@ -2,7 +2,7 @@ from fastapi import APIRouter, HTTPException, status
 from bson import ObjectId
 from app.database import authors_collection
 from app.schemas import Author, AuthorCreate
-from typing import List
+from typing import List, Optional
 
 
 router = APIRouter()
@@ -33,19 +33,25 @@ async def get_author(author_id: str):
 
 
 @router.get("/", response_model=List[Author])
-async def get_authors():
+async def get_authors(name: Optional[str] = None, nationality: Optional[str] = None):
     """
-    Retrieves all authors.
+    Retrieves all authors with optional filtering by name and nationality.
 
     Example URL:
-      GET http://localhost/authors
+      GET http://localhost/authors?name=Alice&nationality=British
     """
-    authors_cursor = authors_collection.find()
+    query = {}
+    if name:
+        query["$or"] = [{"first_name": name}, {"last_name": name}]
+    if nationality:
+        query["nationality"] = nationality
+
+    authors_cursor = authors_collection.find(query)
     authors = await authors_cursor.to_list(length=100)
+    for author in authors:
+        # Convert the MongoDB ObjectId to string and assign it to 'id'
+        author["id"] = str(author["_id"])
     if authors:
-        for author in authors:
-            # Convert the MongoDB ObjectId to string and assign it to 'id'
-            author["id"] = str(author["_id"])
         return authors
     raise HTTPException(status_code=404, detail="No authors found")
 
@@ -129,10 +135,3 @@ async def delete_author(author_id: str):
         return  # HTTP 204 No Content
     raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Author not found")
 
-
-
-
-
-#######################
-# Additional operations
-#######################
