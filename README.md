@@ -1,5 +1,7 @@
 # API-Books
 
+[![linting: pylint](https://img.shields.io/badge/linting-pylint-yellowgreen)](https://github.com/pylint-dev/pylint)
+
 ## Project Objective
 
 This project aims to develop a REST API for managing books and authors using **FastAPI**. The API enables you to perform CRUD operations (Create, Read, Update, Delete) on two types of objects:
@@ -15,7 +17,9 @@ This project aims to develop a REST API for managing books and authors using **F
 - **Automatically generated OpenAPI documentation** (accessible via Swagger UI or Redoc).
 - **Input and output validation** using Pydantic.
 - **Unit tests** to ensure code quality.
+- **Linters** to ensure code quality.
 - **Containerization** with Docker for simplified local deployment.
+
 
 ---
 
@@ -208,3 +212,13 @@ To run the unit tests, ensure **pytest** is installed, then execute:
 ```bash
 pytest
 ```
+
+## Linters
+
+To run the Pylint linter, ensure **pylint** is installed, then execute:
+
+```bash
+pylint books-api
+```
+
+For more informations, refer to the documentation : https://docs.pylint.org/run.html
