@@ -3,31 +3,39 @@ from bson import ObjectId
 from app.database import adherents_collection
 from app.schemas import Adherent, AdherentCreate
 from typing import List, Optional
+from passlib.context import CryptContext
 
 router = APIRouter()
 
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 ###############################
 # CRUD operations for adherents
 ###############################
 
+
+# For display, the best practice is not to return the password, 
+# even hashed, in the API response
 @router.get("/{adherent_id}", response_model=Adherent)
 async def get_adherent(adherent_id: str):
     """
     Retrieves a specific adherent based on its MongoDB identifier.
-    Example URL: GET http://localhost/adherents/67a3947a198cd394f628c263
+    
+    Example URL: GET http://localhost/adherents/67a391a4198cd394f628c25f
     """
     try:
         oid = ObjectId(adherent_id)
     except Exception:
-        raise HTTPException(status_code=400, detail="Invalid adherent ID format")
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid adherent ID format")
     
     adherent = await adherents_collection.find_one({"_id": oid})
     if adherent:
-        # Convert the MongoDB ObjectId to string and assign it to 'id'
         adherent["id"] = str(adherent["_id"])
+        # Remove the password field before returning the adherent
+        adherent.pop("password", None)
         return adherent
-    raise HTTPException(status_code=404, detail="Adherent not found")
+    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Adherent not found")
+
 
 @router.get("/", response_model=List[Adherent])
 async def get_adherents():
@@ -41,6 +49,10 @@ async def get_adherents():
     adherents = await adherents_cursor.to_list(length=100)
     for adherent in adherents:
         adherent["id"] = str(adherent["_id"])
+        
+        # Remove the password field before returning the adherent
+        adherent.pop("password", None)
+        
     if adherents:
         return adherents
     raise HTTPException(status_code=404, detail="No adherents found")
@@ -60,13 +72,19 @@ async def create_adherent(adherent: AdherentCreate):
           "last_name": "Smith",
           "membership_number": "M12345",
           "login": "alice_smith",
-          "password": "hashed_password",
+          "password": "plain_text_password",
           "role": "student"
       }
     """
     adherent_doc = adherent.dict()
+    
+    # Hash the password before storing it
+    adherent_doc["password"] = pwd_context.hash(adherent_doc["password"])
     result = await adherents_collection.insert_one(adherent_doc)
     adherent_doc["id"] = str(result.inserted_id)
+    
+    # Remove the hashed password from the response
+    adherent_doc.pop("password", None)
     return adherent_doc
 
 
