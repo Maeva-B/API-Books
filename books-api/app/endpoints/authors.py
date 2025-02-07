@@ -16,6 +16,7 @@ router = APIRouter()
 async def get_author(author_id: str):
     """
     Retrieves a specific author based on its MongoDB identifier.
+    
     Example URL: GET http://localhost/authors/67a391a4198cd394f628c25f
     """
     try:
@@ -35,7 +36,9 @@ async def get_author(author_id: str):
 async def get_authors():
     """
     Retrieves all authors.
-    Example URL: GET http://localhost/authors
+
+    Example URL:
+      GET http://localhost/authors
     """
     authors_cursor = authors_collection.find()
     authors = await authors_cursor.to_list(length=100)
@@ -50,15 +53,18 @@ async def get_authors():
 @router.post("/", response_model=Author, status_code=status.HTTP_201_CREATED)
 async def create_author(author: AuthorCreate):
     """
-    Creates a new author. 
-    Example URL: POST http://localhost/authors 
+    Creates a new author.
+    
+    Example URL:
+      POST http://localhost/authors
+    
     Example payload:
-    {
-        "first_name": "Alice",
-        "last_name": "Smith",
-        "email": "alice@example.com",
-        "nationality": "British"
-    }
+      {
+          "first_name": "Alice",
+          "last_name": "Smith",
+          "email": "alice@example.com",
+          "nationality": "British"
+      }
     """
     author_doc = author.dict()
     result = await authors_collection.insert_one(author_doc)
@@ -72,7 +78,9 @@ async def create_author(author: AuthorCreate):
 async def update_author(author_id: str, author: AuthorCreate):
     """
     Updates an existing author.
+    
     Example URL: PUT http://localhost/authors/67a391a4198cd394f628c25f
+    
     Example payload:
     {
         "first_name": "Alice",
