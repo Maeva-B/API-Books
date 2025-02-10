@@ -4,6 +4,9 @@ from app.database import adherents_collection
 from app.schemas import Adherent, AdherentCreate
 from typing import List, Optional
 from passlib.context import CryptContext
+from app.schemas import LoginRequest, Token
+from app.auth import create_access_token, ACCESS_TOKEN_EXPIRE_MINUTES
+from datetime import timedelta
 
 router = APIRouter()
 
@@ -143,3 +146,48 @@ async def delete_adherent(adherent_id: str):
     if result.deleted_count == 1:
         return  # HTTP 204 No Content
     raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Adherent not found")
+
+
+
+###############################
+
+
+# Authentication
+# This endpoint is used to authenticate an adherent and return a JWT token
+
+@router.post("/login", response_model=Token)
+async def login(login_request: LoginRequest):
+    """
+    Authenticates an adherent with login and password and returns a JWT token.
+    
+    Example URL: POST http://localhost/adherents/login
+    
+    Example payload:
+    {
+        "login": "toto",
+        "password": "toto"
+    }
+    """
+    # Look for the adherent with the provided login
+    adherent = await adherents_collection.find_one({"login": login_request.login})
+    if not adherent:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Incorrect login or password"
+        )
+    
+    # Verify the password against the hashed value stored in the database
+    if not pwd_context.verify(login_request.password, adherent["password"]):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Incorrect login or password"
+        )
+    
+    # Create the JWT token with the login as the subject ("sub")
+    access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    access_token = create_access_token(
+        data={"sub": login_request.login},
+        expires_delta=access_token_expires
+    )
+    
+    return {"access_token": access_token, "token_type": "bearer"}
