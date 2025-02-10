@@ -69,10 +69,10 @@ class AdherentBase(BaseModel):
     last_name: str
     membership_number: str
     login: str
-    password: str  # Hashed password !!!!
     role: RoleEnum
 
 class AdherentCreate(AdherentBase):
+    password: str
     pass
 
 class Adherent(AdherentBase):
