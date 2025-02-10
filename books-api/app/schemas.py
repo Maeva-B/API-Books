@@ -82,3 +82,15 @@ class Adherent(AdherentBase):
         allow_population_by_field_name = True
         arbitrary_types_allowed = True
         json_encoders = {ObjectId: str}
+        
+        
+
+# Schemas for authentication
+        
+class LoginRequest(BaseModel):
+    login: str
+    password: str
+
+class Token(BaseModel):
+    access_token: str
+    token_type: str

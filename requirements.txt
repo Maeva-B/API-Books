@@ -6,3 +6,4 @@ pymongo
 httpx
 pytest-asyncio
 passlib[bcrypt]
+python-jose
