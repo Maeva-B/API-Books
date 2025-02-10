@@ -151,7 +151,6 @@ async def delete_author(author_id: str):
 
 
 
-
 @router.get("/author/{author_id}/titles", response_model=List[str])
 async def get_books_titles_by_author(
     author_id: str,
