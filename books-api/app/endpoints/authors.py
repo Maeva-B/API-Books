@@ -1,9 +1,8 @@
 from fastapi import APIRouter, HTTPException, status
 from bson import ObjectId
-from app.database import authors_collection
+from app.database import authors_collection, books_collection
 from app.schemas import Author, AuthorCreate
 from typing import List, Optional
-
 
 router = APIRouter()
 
@@ -147,3 +146,42 @@ async def delete_author(author_id: str):
         return  # HTTP 204 No Content
     raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                         detail="Author not found")
+
+
+
+
+
+
+@router.get("/author/{author_id}/titles", response_model=List[str])
+async def get_books_titles_by_author(
+    author_id: str,
+    skip: int = 0,
+    limit: int = 10
+):
+    """
+    Retrieves all book titles for a specific author with pagination.
+
+    Example URL:
+      GET http://localhost/books/author/67a391a4198cd394f628c25c/titles?skip=0&limit=10
+    """
+    # Validate the author_id format, even if author_id is stored as a string
+    try:
+        _ = ObjectId(author_id)
+    except Exception:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
+                            detail="Invalid author ID format")
+
+    # Query for books with the specified author_id; only retrieve the "title" field.
+    cursor = books_collection.find(
+        {"author_id": author_id},
+        {"title": 1, "_id": 0}
+    ).skip(skip).limit(limit)
+    
+    books = await cursor.to_list(length=limit)
+    titles = [book["title"] for book in books if "title" in book]
+    
+    if titles:
+        return titles
+    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                        detail="No books found for this author")
+
