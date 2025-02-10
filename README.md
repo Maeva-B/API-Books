@@ -76,14 +76,30 @@ cd API-Livres
    - **On Windows:**
 
   1. Download the MongoDB Community Edition MSI installer from the [MongoDB Download Center](https://www.mongodb.com/try/download/community).
-  2. Run the installer and follow the on-screen instructions.
+  2. Run the installer MSI and follow the on-screen instructions.
   3. When prompted, choose to install MongoDB as a Windows service (or configure it to run manually if preferred).
-  4. After installation, you can start MongoDB via the Services panel or using the following command in Command Prompt (run as Administrator):
+  4. Test the installation with the following command and add its path (C:\Program Files\MongoDB\Server\8.0\bin) to the PATH environment variable if needed. In that case, restart your PC to apply the changes.
+   ```cmd
+      mongod --version
+      ```
+  5. Create the Database Directory if the folder does not exist. MongoDB stores data in C:\data\db by default :
+  ```cmd
+      mkdir C:\data\db
+      ```
+  6. Download the MongoDB Shell installer (if mongosh is not included) from the [MongoDB Shell Download Center](https://www.mongodb.com/try/download/shell).
+  7. Install it and add its path to the PATH environment variable if needed.
+  8. After installation, you can start MongoDB via the Services panel or using the following command in Command Prompt (run as Administrator):
 
      ```cmd
      net start MongoDB
      ```
-
+  You can also open a terminal and run the MongoDB server then, open another terminal to connect with mongosh. 
+   ```cmd
+     mongod
+     ```
+    ```cmd
+     mongosh
+     ```
 
 ---
 
@@ -133,11 +149,15 @@ If you are using Windows, the process is different. You might need to:
    ```cmd
    net start MongoDB
    ```
+You can also open a terminal and run the MongoDB server.
+   ```cmd
+     mongod
+     ```
 
 ### Connecting to MongoDB
 
 1. **Launch the MongoDB Shell:**
-
+Open another terminal to connect with mongosh. 
    ```bash
    mongosh
    ```
