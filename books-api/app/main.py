@@ -12,7 +12,7 @@ app = FastAPI(
 app.include_router(books.router, prefix="/books", tags=["Books"])
 app.include_router(authors.router, prefix="/authors", tags=["Authors"])
 app.include_router(adherents.router, prefix="/adherents", tags=["Adherents"])
-app.include_router(loans.router, prefix="/loans", tags=["Adherents"])
+app.include_router(loans.router, prefix="/loans", tags=["Loans"])
 
 if __name__ == "__main__":
     import uvicorn
