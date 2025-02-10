@@ -1,3 +1,5 @@
+"""Module that provide the database connection."""
+
 import motor.motor_asyncio
 
 # Connection details

@@ -1,3 +1,5 @@
+"""Main program of the API. Manage roots and web server"""
+
 from fastapi import FastAPI
 from app.endpoints import books, authors, adherents
 
