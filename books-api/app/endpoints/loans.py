@@ -26,8 +26,8 @@ async def get_loan(loan_id: str):
 
 @router.get("/", response_model=List[Loan])
 async def get_loans(
-    loanDate: Optional[date] = None,
-    returnDate: Optional[date] = None,
+    loanDate: Optional[str] = None,
+    returnDate: Optional[str] = None,
     book_id: Optional[str] = None,
     adherent_id: Optional[str]= None,
     skip: int = 0,
@@ -52,7 +52,7 @@ async def get_loans(
         query["book_id"] = book_id
     if adherent_id:
         query["adherent_id"] = adherent_id
-
+    print(query)
     loans_cursor = loans_collection.find(query).skip(skip).limit(limit)
     loans = await loans_cursor.to_list(length=limit)
     for loan in loans:
