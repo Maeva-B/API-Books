@@ -8,3 +8,4 @@ pytest-asyncio
 pylint
 passlib[bcrypt]
 python-jose
+fastapi[all]
