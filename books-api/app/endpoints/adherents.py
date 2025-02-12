@@ -202,10 +202,10 @@ async def login(login_request: LoginRequest):
             detail="Incorrect login or password"
         )
 
-    # Create the JWT token with the login as the subject ("sub")
+    # Create the JWT token
     access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     access_token = create_access_token(
-        data={"sub": login_request.login},
+        data={"sub": login_request.login, "adherent_id": str(adherent["_id"])},
         expires_delta=access_token_expires
     )
 
