@@ -2,10 +2,10 @@
 use books_api;
 
 // Insert several documents into the “books” collection
-// db.books.insertMany([
-//   { title: "Le Petit Prince", description: "Un conte philosophique", author_id: "1234567890abcdef12345678" },
-//   { title: "1984", description: "Roman dystopique", author_id: "abcdef1234567890abcdef12" }
-// ]);
+db.books.insertMany([
+  { title: "Le Petit Prince", description: "Un conte philosophique", author_id: "1234567890abcdef12345678" },
+  { title: "1984", description: "Roman dystopique", author_id: "abcdef1234567890abcdef12" }
+]);
 
 // Insert multiple documents into the “authors” collection
 db.authors.insertMany([
@@ -40,4 +40,11 @@ db.adherents.insertMany([
     password: "hashed_password3", 
     role: "student" 
   }
+]);
+
+db.loans.insertMany([
+  { loanDate:"2012-10-10", returnDate:"2012-10-27", book_id:"0", adherent_id:"0"}, 
+  {loanDate:"2024-12-10", returnDate:"2025-01-10", book_id:"1", adherent_id:"0"}, 
+  { loanDate:"2024-10-06", returnDate: "2024-12-30",book_id:"0", adherent_id:"1"},
+  { loanDate:"2012-10-10", returnDate:"2012-10-27", book_id:"1", adherent_id:"0"}, 
 ]);
