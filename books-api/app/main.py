@@ -1,13 +1,9 @@
 """Main program of the API. Manage roots and web server"""
 
 from fastapi import FastAPI
-<<<<<<< Updated upstream
-from app.endpoints import books, authors, adherents
-=======
 from app.endpoints import books, authors
 from app.controllers import adherent_controller
 from fastapi.middleware.cors import CORSMiddleware
->>>>>>> Stashed changes
 
 app = FastAPI(
     title="Books API",
