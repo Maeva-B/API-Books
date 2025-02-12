@@ -83,7 +83,7 @@ async def get_books(
     raise HTTPException(status_code=404, detail="No books found")
 
 @router.post("/", response_model=Book, status_code=status.HTTP_201_CREATED)
-async def create_loan(book : BookCreate):
+async def create_book(book : BookCreate):
     """
     Creates a new book.
 
@@ -113,48 +113,53 @@ async def create_loan(book : BookCreate):
     book_doc["id"] = str(result.inserted_id)
     return book_doc
 
-# @router.put("/{loan_id}", response_model=Loan, status_code=status.HTTP_200_OK)
-# async def update_loan(loan_id: str, loan: LoanCreate):
-#     """
-#     Updates an existing loan
+@router.put("/{book_id}", response_model=Book, status_code=status.HTTP_200_OK)
+async def update_book(book_id: str, loan: BookCreate):
+    """
+    Updates an existing book
 
-#     Example URL: PUT http://localhost/loans/67a391a4198cd394f628c25f
+    Example URL: PUT http://localhost/books/67a391a4198cd394f628c25f
 
-#     Example payload:
-#     {
-#         "loanDate": "2025-04-20",
-#         "returnDate": "2025-04-27",
-#         "book_id": "2",
-#         "adherent_id": "0"
-#     }
-#     """
-#     # Retrieve the loan id
-#     try:
-#         oid = ObjectId(loan_id)
-#     except Exception:
-#         raise HTTPException(
-#             status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid loan ID format")
+    Example payload:
+    {
+        "title": "Advanced Quantum Mechanics",
+        "description": "An in-depth exploration of quantum mechanics and its modern applications.",
+        "location": "Shelf M7",
+        "label": "Quantum Physics",
+        "type": "physic",
+        "publishDate": "2024-02-10",
+        "publisher": "Harvard University Press",
+        "language": "English",
+        "link": "https://example.com/advanced-quantum-mechanics",
+        "author_id":"3"
+    }
+    """
+    # Retrieve the book id
+    try:
+        oid = ObjectId(book_id)
+    except Exception:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid book ID format")
 
-#     loan_doc = loan.dict()
-#     loan_doc['loanDate'] = loan_doc['loanDate'].isoformat()
-#     loan_doc['returnDate'] = loan_doc['returnDate'].isoformat()
-#     update_result = await loans_collection.update_one({"_id": oid}, {"$set": loan_doc})
+    book_doc = loan.dict()
+    book_doc['publishDate'] = book_doc['publishDate'].isoformat()
+    update_result = await books_collection.update_one({"_id": oid}, {"$set": book_doc})
 
-#     if update_result.modified_count == 1:
-#         updated_loan = await loans_collection.find_one({"_id": oid})
-#         if updated_loan:
-#             updated_loan["id"] = str(updated_loan["_id"])
-#             return updated_loan
+    if update_result.modified_count == 1:
+        updated_book = await books_collection.find_one({"_id": oid})
+        if updated_book:
+            updated_book["id"] = str(updated_book["_id"])
+            return updated_book
 
-#     # Check if the loan exists; if not, raise a 404 error.
-#     existing_loan = await loans_collection.find_one({"_id": oid})
-#     if not existing_loan:
-#         raise HTTPException(
-#             status_code=status.HTTP_404_NOT_FOUND, detail="Loan not found")
+    # Check if the loan exists; if not, raise a 404 error.
+    existing_book = await books_collection.find_one({"_id": oid})
+    if not existing_book:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Book not found")
 
-#     # If no modifications were made, return the existing loan.
-#     existing_loan["id"] = str(existing_loan["_id"])
-#     return existing_loan
+    # If no modifications were made, return the existing loan.
+    existing_book["id"] = str(existing_book["_id"])
+    return existing_book
 
 # @router.delete("/{loan_id}", status_code=status.HTTP_200_OK)
 # async def delete_loan(loan_id: str):
