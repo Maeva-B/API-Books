@@ -3,7 +3,7 @@
 from fastapi import FastAPI
 from app.controllers import adherent_controller, authors_controller
 from fastapi.middleware.cors import CORSMiddleware
-from app.endpoints import books, authors, adherents, loans
+from app.endpoints import books, loans
 
 app = FastAPI(
     title="Books API",
