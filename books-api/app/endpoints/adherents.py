@@ -202,20 +202,11 @@
 #             detail="Incorrect login or password"
 #         )
 
-<<<<<<< Updated upstream
-    # Create the JWT token with the login as the subject ("sub")
-    access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
-    access_token = create_access_token(
-        data={"sub": login_request.login},
-        expires_delta=access_token_expires
-    )
-=======
 #     # Create the JWT token
 #     access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
 #     access_token = create_access_token(
 #         data={"sub": login_request.login, "adherent_id": str(adherent["_id"])},
 #         expires_delta=access_token_expires
 #     )
->>>>>>> Stashed changes
 
 #     return {"access_token": access_token, "token_type": "bearer"}
