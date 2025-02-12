@@ -161,20 +161,20 @@ async def update_book(book_id: str, loan: BookCreate):
     existing_book["id"] = str(existing_book["_id"])
     return existing_book
 
-# @router.delete("/{loan_id}", status_code=status.HTTP_200_OK)
-# async def delete_loan(loan_id: str):
-#     """
-#     Deletes an existing loan.
-#     Example URL: DELETE http://localhost/loans/67a391a4198cd394f628c25f
-#     """
-#     try:
-#         oid = ObjectId(loan_id)
-#     except Exception:
-#         raise HTTPException(
-#             status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid loan ID format")
+@router.delete("/{book_id}", status_code=status.HTTP_200_OK)
+async def delete_book(book_id: str):
+    """
+    Deletes an existing book.
+    Example URL: DELETE http://localhost/books/67a391a4198cd394f628c25f
+    """
+    try:
+        oid = ObjectId(book_id)
+    except Exception:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid book ID format")
 
-#     result = await loans_collection.delete_one({"_id": oid})
-#     if result.deleted_count == 1:
-#         return  # HTTP 204 No Content
-#     raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
-#                         detail="Loan not found")
+    result = await books_collection.delete_one({"_id": oid})
+    if result.deleted_count == 1:
+        return  # HTTP 204 No Content
+    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                        detail="Book not found")
