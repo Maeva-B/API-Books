@@ -77,12 +77,14 @@ class BookBase(BaseModel):
     publishDate : date
     publisher : str
     language : str
+    link : str
 
 
 class BookCreate(BookBase):
     """Book creation class"""
 
     author_id: str
+    pass
 
 class Book(BookBase):
     """Book base class config"""

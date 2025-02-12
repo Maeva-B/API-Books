@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException, status
 from bson import ObjectId
 from app.database import books_collection
-from app.schemas import Book, BookCreate
+from app.schemas import Book, BookCreate, TypeEnum
 from typing import List, Optional
 
 router = APIRouter()
@@ -16,53 +16,73 @@ async def get_book(book_id: str):
         oid = ObjectId(book_id)
     except Exception:
         raise HTTPException(status_code=400, detail="Invalid book ID format")
-    
+    print("coucou")
     book = await books_collection.find_one({"_id": oid})
+    print("coucou2")
     if book:
         book["id"] = str(book["_id"])
         return book
     raise HTTPException(status_code=404, detail="Book not found")
 
 
-# @router.get("/", response_model=List[Book])
-# async def get_books(
-#     loanDate: Optional[str] = None,
-#     returnDate: Optional[str] = None,
-#     book_id: Optional[str] = None,
-#     adherent_id: Optional[str]= None,
-#     skip: int = 0,
-#     limit: int = 10
-# ):
-#     """
-#     Retrieves all books with optional filtering by book date, return date, book id and adherent id, with pagination.
+@router.get("/", response_model=List[Book])
+async def get_books(
+    title: Optional[str] = None,
+    description: Optional[str] = None,
+    location: Optional[str] = None,
+    label: Optional[str]= None,
+    type: Optional[TypeEnum] = None,
+    publishDate: Optional[str] = None,
+    publisher: Optional[str] = None,
+    language: Optional[str] = None,
+    link: Optional[str] = None,
+    author_id:Optional[str] = None,
+    skip: int = 0,
+    limit: int = 10
+):
+    """
+    Retrieves all books with optional filtering by title, description, location, label, type, publishDate, publisher and language, with pagination.
 
-#     Example URL:
-#       GET http://localhost/loans?loanDate=2024-10-06&returnDate=2024-12-30&skip=0&limit=10
+    Example URL:
+      GET http://localhost/loans?loanDate=2024-10-06&returnDate=2024-12-30&skip=0&limit=10
       
-#     Skip (default 0): Indicates the number of loans to skip from the beginning of the result set.
+    Skip (default 0): Indicates the number of loans to skip from the beginning of the result set.
     
-#     Limit (default 10): Indicates the maximum number of loans to return.
-#     """
-#     query = {}
-#     if loanDate:
-#         query["loanDate"] = loanDate
-#     if returnDate:
-#         query["returnDate"] = returnDate
-#     if book_id:
-#         query["book_id"] = book_id
-#     if adherent_id:
-#         query["adherent_id"] = adherent_id
+    Limit (default 10): Indicates the maximum number of loans to return.
+    """
+    query = {}
+    if title:
+        query["title"] = { "$regex": rf"{title}", "$options": "i" }
+    if description:
+        query["description"] = { "$regex": rf"{description}", "$options": "i" }
+    if location:
+        query["location"] = { "$regex": rf"{location}", "$options": "i" }
+    if label:
+        query["label"] =  { "$regex": rf"{label}", "$options": "i" }
+    if type:
+        query["type"] =  type
+    if publishDate:
+        query["publishDate"] =  publishDate
+    if publisher:
+        query["publisher"] =  { "$regex": rf"{publisher}", "$options": "i" }
+    if language:
+        query["language"] =  { "$regex": rf"{language}", "$options": "i" }
+    if link:
+        query["link"] =  { "$regex": rf"{link}", "$options": "i" }
+    if author_id:
+        query["author_id"] =  author_id
     
-#     loans_cursor = loans_collection.find(query).skip(skip).limit(limit)
-#     loans = await loans_cursor.to_list(length=limit)
-#     for loan in loans:
-#         # Convert the MongoDB ObjectId to string and assign it to 'id'
-#         loan["id"] = str(loan["_id"])
-#     if loans:
-#         return loans
-#     raise HTTPException(status_code=404, detail="No loans found")
+    print(query)
+    books_cursor = books_collection.find(query).skip(skip).limit(limit)
+    books = await books_cursor.to_list(length=limit)
+    for book in books:
+        # Convert the MongoDB ObjectId to string and assign it to 'id'
+        book["id"] = str(book["_id"])
+    if books:
+        return books
+    raise HTTPException(status_code=404, detail="No books found")
 
-# @router.post("/", response_model=Loan, status_code=status.HTTP_201_CREATED)
+# @router.post("/", response_model=Book, status_code=status.HTTP_201_CREATED)
 # async def create_loan(loan : LoanCreate):
 #     """
 #     Creates a new loan.
