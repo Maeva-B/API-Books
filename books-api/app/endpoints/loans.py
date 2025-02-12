@@ -60,4 +60,29 @@ async def get_loans(
         loan["id"] = str(loan["_id"])
     if loans:
         return loans
-    raise HTTPException(status_code=404, detail="No authors found")
+    raise HTTPException(status_code=404, detail="No loans found")
+
+@router.post("/", response_model=Loan, status_code=status.HTTP_201_CREATED)
+async def create_loan(loan : LoanCreate):
+    """
+    Creates a new loan.
+
+    Example URL:
+      POST http://localhost/loans
+
+    Example payload:
+      {
+          "loanDate": "2025-04-20",
+          "returnDate": "2025-04-27",
+          "book_id": "2",
+          "adherent_id": "0"
+      }
+    """
+    
+    loan_doc = loan.dict()
+    loan_doc['loanDate'] = loan_doc['loanDate'].isoformat()
+    loan_doc['returnDate'] = loan_doc['returnDate'].isoformat()
+    result = await loans_collection.insert_one(loan_doc)
+    # Append the generated id to the document.
+    loan_doc["id"] = str(result.inserted_id)
+    return loan_doc

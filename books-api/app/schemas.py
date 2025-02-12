@@ -82,6 +82,7 @@ class LoanCreate(LoanBase):
 
     book_id : str
     adherent_id : str
+    pass
 
 class Loan(LoanBase):
     """Loan base class config"""
