@@ -9,7 +9,7 @@ router = APIRouter()
 async def get_book(book_id: str):
     """
     Retrieves a specific book based on its MongoDB identifier.
-    Example URL: GET http://localhost/book/67a36d9a198cd394f628c25c
+    Example URL: GET http://localhost/books/67a36d9a198cd394f628c25c
     """
     try:
         oid = ObjectId(book_id)

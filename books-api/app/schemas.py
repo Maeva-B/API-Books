@@ -2,6 +2,7 @@
 
 from bson import ObjectId
 from pydantic import BaseModel, Field
+from datetime import date
 from typing import Optional
 from enum import Enum
 
@@ -69,6 +70,32 @@ class Book(BookBase):
         allow_population_by_field_name = True
         arbitrary_types_allowed = True
         json_encoders = {ObjectId: str}
+
+# Schemas for loan
+class LoanBase(BaseModel):
+    """Loan base class"""
+    loanDate: date
+    returnDate : date
+
+class LoanCreate(LoanBase):
+    """Loan creation class"""
+
+    book_id : str
+    adherent_id : str
+    pass
+
+class Loan(LoanBase):
+    """Loan base class config"""
+
+    id: Optional[PyObjectId] = Field(alias="_id")
+    book_id : str
+    adherent_id : str
+
+    class Config:
+        allow_population_by_field_name = True
+        arbitrary_types_allowed = True
+        json_encoders = {ObjectId: str}
+
 
 # Enum for the adherent role
 class RoleEnum(str, Enum):
