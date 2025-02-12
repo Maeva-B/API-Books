@@ -1,8 +1,8 @@
 """Main program of the API. Manage roots and web server"""
 
 from fastapi import FastAPI
-from app.endpoints import books, authors
-from app.controllers import adherent_controller
+from app.endpoints import books
+from app.controllers import adherent_controller, authors_controller
 from fastapi.middleware.cors import CORSMiddleware
 
 
@@ -26,7 +26,7 @@ app.add_middleware(
 )
 
 app.include_router(books.router, prefix="/books", tags=["Books"])
-app.include_router(authors.router, prefix="/authors", tags=["Authors"])
+app.include_router(authors_controller.router, prefix="/authors", tags=["Authors"])
 app.include_router(adherent_controller.router, prefix="/adherents", tags=["Adherents"])
 
 if __name__ == "__main__":
