@@ -48,17 +48,43 @@ class Author(AuthorBase):
         arbitrary_types_allowed = True
         json_encoders = {ObjectId: str}
 
+# Enum for the literary genre of the book
+class TypeEnum(str, Enum):
+    """Book literary genre enumeration"""
+
+    datascience = "datascience"
+    web = "web"
+    algebra = "algebra"
+    optimization = "optimization"
+    phylosophy = "phylosophy"
+    literary = "literary"
+    system = "system"
+    network = "network"
+    physic = "physic"
+    chemistry = "chemistry"
+    optic = "optic"
+    electronic = "electronic"
+
 # Schemas for books
 class BookBase(BaseModel):
     """Book base class"""
 
     title: str
     description: Optional[str] = None
+    location:str
+    label:str
+    type : TypeEnum
+    publishDate : date
+    publisher : str
+    language : str
+    link : str
+
 
 class BookCreate(BookBase):
     """Book creation class"""
 
     author_id: str
+    pass
 
 class Book(BookBase):
     """Book base class config"""
