@@ -44,8 +44,8 @@ async def get_books(
     Retrieves all books with optional filtering by title, description, location, label, type, publishDate, publisher and language, with pagination.
 
     Example URL:
-      GET http://localhost/loans?loanDate=2024-10-06&returnDate=2024-12-30&skip=0&limit=10
-      
+      GET http://localhost/loans?title=Network&description=study&location=H2&label=network&type=network&publishDate=2021-09-05&publisher=Kauf&language=ish&link=example&skip=0&limit=10
+
     Skip (default 0): Indicates the number of loans to skip from the beginning of the result set.
     
     Limit (default 10): Indicates the maximum number of loans to return.
@@ -82,30 +82,36 @@ async def get_books(
         return books
     raise HTTPException(status_code=404, detail="No books found")
 
-# @router.post("/", response_model=Book, status_code=status.HTTP_201_CREATED)
-# async def create_loan(loan : LoanCreate):
-#     """
-#     Creates a new loan.
+@router.post("/", response_model=Book, status_code=status.HTTP_201_CREATED)
+async def create_loan(book : BookCreate):
+    """
+    Creates a new book.
 
-#     Example URL:
-#       POST http://localhost/loans
+    Example URL:
+      POST http://localhost/books
 
-#     Example payload:
-#       {
-#           "loanDate": "2025-04-20",
-#           "returnDate": "2025-04-27",
-#           "book_id": "2",
-#           "adherent_id": "0"
-#       }
-#     """
+    Example payload:
+      {
+        "title": "Advanced Quantum Mechanics",
+        "description": "An in-depth exploration of quantum mechanics and its modern applications.",
+        "location": "Shelf M7",
+        "label": "Quantum Physics",
+        "type": "physic",
+        "publishDate": "2024-02-10",
+        "publisher": "Harvard University Press",
+        "language": "English",
+        "link": "https://example.com/advanced-quantum-mechanics",
+        "author_id":"3"
+        }
+
+    """
     
-#     loan_doc = loan.dict()
-#     loan_doc['loanDate'] = loan_doc['loanDate'].isoformat()
-#     loan_doc['returnDate'] = loan_doc['returnDate'].isoformat()
-#     result = await loans_collection.insert_one(loan_doc)
-#     # Append the generated id to the document.
-#     loan_doc["id"] = str(result.inserted_id)
-#     return loan_doc
+    book_doc = book.dict()
+    book_doc['publishDate'] = book_doc['publishDate'].isoformat()
+    result = await books_collection.insert_one(book_doc)
+    # Append the generated id to the document.
+    book_doc["id"] = str(result.inserted_id)
+    return book_doc
 
 # @router.put("/{loan_id}", response_model=Loan, status_code=status.HTTP_200_OK)
 # async def update_loan(loan_id: str, loan: LoanCreate):
