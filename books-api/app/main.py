@@ -1,15 +1,17 @@
 """Main program of the API. Manage roots and web server"""
 
 from fastapi import FastAPI
-from app.controllers import adherent_controller, authors_controller
+from app.endpoints import books, books, loans
 from fastapi.middleware.cors import CORSMiddleware
-from app.endpoints import books, loans
+from app.controllers import adherent_controller, authors_controller
 
 app = FastAPI(
     title="Books API",
     description="API to manage books and their authors",
     version="1.0.0"
 )
+
+# CORS
 
 origins = [
     "http://localhost:5173",
@@ -29,6 +31,7 @@ app.include_router(authors_controller.router, prefix="/authors", tags=["Authors"
 app.include_router(adherent_controller.router, prefix="/adherents", tags=["Adherents"])
 app.include_router(loans.router, prefix="/loans", tags=["Loans"])
 
+# Run the app with uvicorn
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run("app.main:app", host="0.0.0.0", port=8000, reload=True)
