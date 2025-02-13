@@ -5,7 +5,6 @@ db.authors.drop();
 db.adherents.drop();
 db.loans.drop();
 
-// Création des ObjectId pour les auteurs
 const author1Id = ObjectId();
 const author2Id = ObjectId();
 const author3Id = ObjectId();
@@ -42,19 +41,12 @@ db.authors.insertMany([
   }
 ]);
 
-// Création des ObjectId pour les livres
 const book1Id  = ObjectId();
 const book2Id  = ObjectId();
 const book3Id  = ObjectId();
 const book4Id  = ObjectId();
 const book5Id  = ObjectId();
 const book6Id  = ObjectId();
-const book7Id  = ObjectId();
-const book8Id  = ObjectId();
-const book9Id  = ObjectId();
-const book10Id = ObjectId();
-const book11Id = ObjectId();
-const book12Id = ObjectId();
 
 db.books.insertMany([
   {
@@ -121,10 +113,22 @@ db.books.insertMany([
     language: "French",
     link: "https://example.com/philosophy",
     author_id: author1Id
+  },
+  {
+    _id: book6Id,
+    title: "Advanced Machine Learning",
+    description: "A comprehensive guide to advanced machine learning techniques.",
+    location: "Shelf F1",
+    label: "Machine Learning",
+    type: "optimization",
+    publishDate: "2025-01-15",
+    publisher: "MIT Press",
+    language: "English",
+    link: "https://example.com/advanced-ml",
+    author_id: author3Id
   }
 ]);
 
-// Création des ObjectId pour les adhérents
 const adherent1Id = ObjectId();
 const adherent2Id = ObjectId();
 const adherent3Id = ObjectId();
@@ -159,17 +163,16 @@ db.adherents.insertMany([
   }
 ]);
 
-// Création des prêts (loans) avec des références valides aux ObjectId
 db.loans.insertMany([
   { 
     loanDate: "2012-10-10", 
     returnDate: "2012-10-27", 
-    book_id: book1Id, // Correspond à un vrai ObjectId
-    adherent_id: adherent1Id  // Correspond à un vrai ObjectId
+    book_id: book1Id, 
+    adherent_id: adherent1Id  
   },
   { 
     loanDate: "2024-12-10", 
-    returnDate: "2025-01-10", 
+    returnDate: "2024-01-10", 
     book_id: book2Id, 
     adherent_id: adherent1Id  
   },
@@ -184,5 +187,11 @@ db.loans.insertMany([
     returnDate: "2012-10-27", 
     book_id: book2Id, 
     adherent_id: adherent1Id  
+  },
+  { 
+    loanDate: "2025-02-01", 
+    returnDate: "2025-02-28", 
+    book_id: book6Id, 
+    adherent_id: adherent3Id  
   }
 ]);
