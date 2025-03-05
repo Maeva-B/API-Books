@@ -8,6 +8,7 @@ import re
 
 router = APIRouter()
 
+
 @router.get("/{loan_id}", response_model=Loan)
 async def get_loan(loan_id: str):
     """
@@ -18,7 +19,7 @@ async def get_loan(loan_id: str):
         oid = ObjectId(loan_id)
     except Exception:
         raise HTTPException(status_code=400, detail="Invalid loan ID format")
-    
+
     loan = await loans_collection.find_one({"_id": oid})
     if loan:
         loan["id"] = str(loan["_id"])
@@ -45,11 +46,21 @@ async def get_loans(
         query["loanDate"] = loanDate
     if returnDate:
         query["returnDate"] = returnDate
+
     if book_id:
-        query["book_id"] = book_id
+        try:
+            query["book_id"] = ObjectId(book_id)
+        except Exception:
+            raise HTTPException(
+                status_code=400, detail="Invalid book_id format")
+
     if adherent_id:
-        query["adherent_id"] = adherent_id
-    
+        try:
+            query["adherent_id"] = ObjectId(adherent_id)
+        except Exception:
+            raise HTTPException(
+                status_code=400, detail="Invalid adherent_id format")
+
     loans_cursor = loans_collection.find(query).skip(skip).limit(limit)
     loans = await loans_cursor.to_list(length=limit)
     for loan in loans:
@@ -66,12 +77,23 @@ async def create_loan(loan: LoanCreate):
     """
     Creates a new loan.
     """
-    loan_doc = loan.dict()
-    loan_doc['loanDate'] = loan_doc['loanDate'].isoformat()
-    loan_doc['returnDate'] = loan_doc['returnDate'].isoformat()
-    result = await loans_collection.insert_one(loan_doc)
-    loan_doc["id"] = str(result.inserted_id)
-    return loan_doc
+    try:
+        loan_doc = loan.dict()
+        loan_doc["loanDate"] = loan_doc["loanDate"].isoformat()
+        loan_doc["returnDate"] = loan_doc["returnDate"].isoformat(
+        ) if loan_doc["returnDate"] else None
+
+        loan_doc["book_id"] = ObjectId(loan.book_id)
+        loan_doc["adherent_id"] = ObjectId(loan.adherent_id)
+
+        result = await loans_collection.insert_one(loan_doc)
+        loan_doc["_id"] = str(result.inserted_id)
+        loan_doc["book_id"] = str(loan_doc["book_id"])
+        loan_doc["adherent_id"] = str(loan_doc["adherent_id"])
+
+        return loan_doc
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
 
 
 @router.put("/{loan_id}", response_model=Loan, status_code=status.HTTP_200_OK)
@@ -82,7 +104,8 @@ async def update_loan(loan_id: str, loan: LoanCreate):
     try:
         oid = ObjectId(loan_id)
     except Exception:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid loan ID format")
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid loan ID format")
 
     loan_doc = loan.dict()
     loan_doc['loanDate'] = loan_doc['loanDate'].isoformat()
@@ -99,8 +122,9 @@ async def update_loan(loan_id: str, loan: LoanCreate):
 
     existing_loan = await loans_collection.find_one({"_id": oid})
     if not existing_loan:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Loan not found")
-    
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Loan not found")
+
     existing_loan["id"] = str(existing_loan["_id"])
     existing_loan["book_id"] = str(existing_loan["book_id"])
     existing_loan["adherent_id"] = str(existing_loan["adherent_id"])
@@ -115,12 +139,14 @@ async def delete_loan(loan_id: str):
     try:
         oid = ObjectId(loan_id)
     except Exception:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid loan ID format")
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid loan ID format")
 
     result = await loans_collection.delete_one({"_id": oid})
     if result.deleted_count == 1:
         return
-    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Loan not found")
+    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                        detail="Loan not found")
 
 
 @router.delete("/", response_model=int, status_code=status.HTTP_200_OK)
@@ -137,19 +163,29 @@ async def delete_all_loan(
     query = {}
     if loanDate:
         if re.match("^[0-9]{4}-[0-1][0-9]-[0-9]{2}$", f"{loanDate}"):
-            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid loan date format")
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid loan date format")
         query["loanDate"] = loanDate
 
     if returnDate:
         if re.match("^[0-9]{4}-[0-1][0-9]-[0-9]{2}$", f"{returnDate}"):
-            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid return date format")
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid return date format")
         query["returnDate"] = returnDate
-    
+
     if book_id:
-        query["book_id"] = book_id
-    
+        try:
+            query["book_id"] = ObjectId(book_id)
+        except Exception:
+            raise HTTPException(
+                status_code=400, detail="Invalid book_id format")
+
     if adherent_id:
-        query["adherent_id"] = adherent_id
+        try:
+            query["adherent_id"] = ObjectId(adherent_id)
+        except Exception:
+            raise HTTPException(
+                status_code=400, detail="Invalid adherent_id format")
 
     result = await loans_collection.delete_many(query)
     if result.deleted_count >= 1:
