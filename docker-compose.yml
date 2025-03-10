@@ -1,0 +1,23 @@
+
+services:
+  # API service
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./books-api/app:/app
+    depends_on:
+      - mongodb
+    restart: always
+  
+  # MongoDB Database
+  mongodb:
+    image: mongo:latest
+    restart: always
+    ports:
+      - '27017:27017' # default mongodb port
+    volumes:
+      - /data/db:/data/db

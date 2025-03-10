@@ -101,7 +101,13 @@ cd API-Livres
          mongosh
          ```
 
-4. **Install Postman App**
+4. **Install Docker**
+
+Docker is an open platform that wraps our applications from our infrastructure. 
+
+   1. Install Docker Desktop on your local machine (https://docs.docker.com/get-started/introduction/get-docker-desktop/) and complete setup process.
+
+5. **Install Postman App**
    1. Download the installer adapted for your OS from the [Postman Download Center](https://www.postman.com/downloads/).
    2. Run the installer MSI and follow the on-screen instructions.
    3. Install Postman Agent if you use the web version.
