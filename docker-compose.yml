@@ -20,4 +20,4 @@ services:
     ports:
       - '27017:27017' # default mongodb port
     volumes:
-      - /data/db:/data/db
+      - ./mongodb_data:/data/db
