@@ -66,6 +66,7 @@ async def create_adherent(adherent: AdherentCreate):
     **Request Body:**
     - **first_name**: The first name of the adherent.
     - **last_name**: The last name of the adherent.
+    - **membership number": The membership number of the adherent.
     - **login**: The login username of the adherent.
     - **password**: The password (will be hashed before storage).
     - **role**: The role of the adherent (e.g., "user", "admin").
@@ -76,6 +77,7 @@ async def create_adherent(adherent: AdherentCreate):
     {
       "first_name": "John",
       "last_name": "Doe",
+      "membership_number": "string",
       "login": "johndoe",
       "password": "your_password",
       "role": "user"
@@ -101,6 +103,7 @@ async def update_adherent(adherent_id: str, adherent: AdherentCreate):
     **Request Body:**
     - **first_name**: The new first name.
     - **last_name**: The new last name.
+    - **membership number": The new membership number.
     - **login**: The new login username.
     - **password**: The new password.
     - **role**: The new role.
@@ -111,6 +114,7 @@ async def update_adherent(adherent_id: str, adherent: AdherentCreate):
     {
       "first_name": "John",
       "last_name": "Doe",
+      "membership_number": "string",
       "login": "johndoe",
       "password": "new_password",
       "role": "admin"
