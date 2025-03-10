@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException, status
 from typing import List, Optional
-from app.schemas import Adherent, AdherentCreate, LoginRequest,Token
+from app.schemas import Adherent, AdherentCreate, LoginRequest,Token, Loan
 from app.use_cases import adherent_use_case
 
 router = APIRouter()
@@ -184,3 +184,20 @@ async def login(login_request: LoginRequest):
     if not token_data:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Incorrect login or password")
     return token_data
+
+
+
+@router.get("/{adherent_id}/loans", response_model=List[Loan], summary="Retrieve loans for an adherent")
+async def get_loans_for_adherent(adherent_id: str):
+    """
+    Retrieve a list of loans for a specific adherent.
+    
+    **Exemple :**
+    ```
+    GET /adherents/60b725f10c9f1e23d8f3a3e9/loans
+    ```
+    """
+    loans = await adherent_use_case.get_loans_by_adherent_use_case(adherent_id)
+    if loans:
+        return loans
+    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="No loans found for this adherent")

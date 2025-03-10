@@ -95,3 +95,15 @@ async def login_use_case(login: str, password: str) -> dict:
         expires_delta=access_token_expires
     )
     return {"access_token": access_token, "token_type": "bearer"}
+
+
+
+async def get_loans_by_adherent_use_case(adherent_id: str) -> list:
+    loans = await adherent_repository.find_loans_by_adherent(adherent_id)
+
+    for loan in loans:
+        loan["_id"] = str(loan["_id"])
+        loan["book_id"] = str(loan["book_id"])
+        loan["adherent_id"] = str(loan["adherent_id"])
+
+    return loans

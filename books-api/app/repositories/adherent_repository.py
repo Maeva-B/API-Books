@@ -1,5 +1,5 @@
 from bson import ObjectId
-from app.database import adherents_collection
+from app.database import adherents_collection, loans_collection
 
 async def find_by_id(adherent_id: str) -> dict:
     try:
@@ -34,3 +34,14 @@ async def delete_adherent(adherent_id: str) -> int:
 
 async def find_by_login(login: str) -> dict:
     return await adherents_collection.find_one({"login": login})
+
+
+async def find_loans_by_adherent(adherent_id: str) -> list:
+    try:
+        oid = ObjectId(adherent_id)
+    except Exception:
+        return []
+
+    cursor = loans_collection.find({"adherent_id": oid})
+    loans = await cursor.to_list(length=None)
+    return loans
