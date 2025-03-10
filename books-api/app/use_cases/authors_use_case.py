@@ -32,7 +32,6 @@ async def update_author_use_case(author_id: str, author_data: AuthorCreate) -> d
         if updated_author:
             updated_author["id"] = str(updated_author["_id"])
             return updated_author
-    # Si aucune modification n'a été effectuée, on retourne l'auteur existant (s'il existe)
     existing_author = await authors_repository.find_by_id(author_id)
     if existing_author:
         existing_author["id"] = str(existing_author["_id"])
@@ -42,3 +41,8 @@ async def update_author_use_case(author_id: str, author_data: AuthorCreate) -> d
 async def delete_author_use_case(author_id: str) -> bool:
     deleted_count = await authors_repository.delete_author(author_id)
     return deleted_count == 1
+
+
+async def get_books_by_author_use_case(author_id: str) -> list:
+    books = await authors_repository.find_books_by_author(author_id)
+    return books

@@ -137,3 +137,24 @@ async def delete_author(author_id: str):
     if success:
         return  # HTTP 204 No Content
     raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Author not found")
+
+
+@router.get(
+    "/{author_id}/books",
+    summary="Retrieve books by author",
+)
+async def get_books_by_author(author_id: str):
+    """
+    Retrieve all books linked to a specific author.
+    
+    - **author_id**: Unique identifier of the author.
+    
+    **Example Request:**
+    ```
+    GET /authors/60b725f10c9f1e23d8f3a3e9/books
+    ```
+    """
+    books = await authors_use_case.get_books_by_author_use_case(author_id)
+    if books:
+        return books
+    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="No books found for this author")

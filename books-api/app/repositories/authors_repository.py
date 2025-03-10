@@ -1,5 +1,5 @@
 from bson import ObjectId
-from app.database import authors_collection
+from app.database import authors_collection, books_collection
 
 async def find_by_id(author_id: str) -> dict:
     try:
@@ -31,3 +31,21 @@ async def delete_author(author_id: str) -> int:
         return 0
     result = await authors_collection.delete_one({"_id": oid})
     return result.deleted_count
+
+
+async def find_books_by_author(author_id: str) -> list:
+    try:
+        oid = ObjectId(author_id)
+    except Exception:
+        return []
+    
+    books_cursor = books_collection.find({"author_id": oid})
+    books = await books_cursor.to_list(length=None)
+
+    for book in books:
+        book["id"] = str(book["_id"])
+        del book["_id"]
+        if "author_id" in book:
+            book["author_id"] = str(book["author_id"])
+
+    return books
