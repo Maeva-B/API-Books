@@ -9,3 +9,6 @@ pylint
 passlib[bcrypt]
 python-jose
 fastapi[all]
+flake8
+black
+isort

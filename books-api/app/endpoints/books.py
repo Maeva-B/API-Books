@@ -6,6 +6,7 @@ from typing import List, Optional
 
 router = APIRouter()
 
+
 @router.get("/{book_id}", response_model=Book)
 async def get_book(book_id: str):
     """
@@ -39,7 +40,7 @@ async def get_books(
     link: Optional[str] = None,
     author_id: Optional[str] = None,
     skip: int = 0,
-    limit: int = 10
+    limit: int = 10,
 ):
     """
     Retrieves all books with optional filtering.
@@ -84,7 +85,7 @@ async def create_book(book: BookCreate):
     """
     book_doc = book.dict()
     # Convertir la date en chaîne ISO
-    book_doc['publishDate'] = book_doc['publishDate'].isoformat()
+    book_doc["publishDate"] = book_doc["publishDate"].isoformat()
     result = await books_collection.insert_one(book_doc)
     book_doc["id"] = str(result.inserted_id)
     return book_doc
@@ -98,10 +99,12 @@ async def update_book(book_id: str, book_data: BookCreate):
     try:
         oid = ObjectId(book_id)
     except Exception:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid book ID format")
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid book ID format"
+        )
 
     book_doc = book_data.dict()
-    book_doc['publishDate'] = book_doc['publishDate'].isoformat()
+    book_doc["publishDate"] = book_doc["publishDate"].isoformat()
     update_result = await books_collection.update_one({"_id": oid}, {"$set": book_doc})
 
     if update_result.modified_count == 1:
@@ -114,7 +117,9 @@ async def update_book(book_id: str, book_data: BookCreate):
 
     existing_book = await books_collection.find_one({"_id": oid})
     if not existing_book:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Book not found")
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Book not found"
+        )
 
     existing_book["id"] = str(existing_book["_id"])
     if "author_id" in existing_book:
@@ -130,7 +135,9 @@ async def delete_book(book_id: str):
     try:
         oid = ObjectId(book_id)
     except Exception:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid book ID format")
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid book ID format"
+        )
 
     result = await books_collection.delete_one({"_id": oid})
     if result.deleted_count == 1:

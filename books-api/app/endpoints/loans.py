@@ -2,7 +2,6 @@ from fastapi import APIRouter, HTTPException, status
 from bson import ObjectId
 from app.database import loans_collection
 from app.schemas import Loan, LoanCreate
-from datetime import date
 from typing import List, Optional
 import re
 
@@ -36,7 +35,7 @@ async def get_loans(
     book_id: Optional[str] = None,
     adherent_id: Optional[str] = None,
     skip: int = 0,
-    limit: int = 10
+    limit: int = 10,
 ):
     """
     Retrieves all loans with optional filtering.
@@ -51,15 +50,13 @@ async def get_loans(
         try:
             query["book_id"] = ObjectId(book_id)
         except Exception:
-            raise HTTPException(
-                status_code=400, detail="Invalid book_id format")
+            raise HTTPException(status_code=400, detail="Invalid book_id format")
 
     if adherent_id:
         try:
             query["adherent_id"] = ObjectId(adherent_id)
         except Exception:
-            raise HTTPException(
-                status_code=400, detail="Invalid adherent_id format")
+            raise HTTPException(status_code=400, detail="Invalid adherent_id format")
 
     loans_cursor = loans_collection.find(query).skip(skip).limit(limit)
     loans = await loans_cursor.to_list(length=limit)
@@ -80,8 +77,9 @@ async def create_loan(loan: LoanCreate):
     try:
         loan_doc = loan.dict()
         loan_doc["loanDate"] = loan_doc["loanDate"].isoformat()
-        loan_doc["returnDate"] = loan_doc["returnDate"].isoformat(
-        ) if loan_doc["returnDate"] else None
+        loan_doc["returnDate"] = (
+            loan_doc["returnDate"].isoformat() if loan_doc["returnDate"] else None
+        )
 
         loan_doc["book_id"] = ObjectId(loan.book_id)
         loan_doc["adherent_id"] = ObjectId(loan.adherent_id)
@@ -105,11 +103,12 @@ async def update_loan(loan_id: str, loan: LoanCreate):
         oid = ObjectId(loan_id)
     except Exception:
         raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid loan ID format")
+            status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid loan ID format"
+        )
 
     loan_doc = loan.dict()
-    loan_doc['loanDate'] = loan_doc['loanDate'].isoformat()
-    loan_doc['returnDate'] = loan_doc['returnDate'].isoformat()
+    loan_doc["loanDate"] = loan_doc["loanDate"].isoformat()
+    loan_doc["returnDate"] = loan_doc["returnDate"].isoformat()
     update_result = await loans_collection.update_one({"_id": oid}, {"$set": loan_doc})
 
     if update_result.modified_count == 1:
@@ -123,7 +122,8 @@ async def update_loan(loan_id: str, loan: LoanCreate):
     existing_loan = await loans_collection.find_one({"_id": oid})
     if not existing_loan:
         raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND, detail="Loan not found")
+            status_code=status.HTTP_404_NOT_FOUND, detail="Loan not found"
+        )
 
     existing_loan["id"] = str(existing_loan["_id"])
     existing_loan["book_id"] = str(existing_loan["book_id"])
@@ -140,13 +140,13 @@ async def delete_loan(loan_id: str):
         oid = ObjectId(loan_id)
     except Exception:
         raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid loan ID format")
+            status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid loan ID format"
+        )
 
     result = await loans_collection.delete_one({"_id": oid})
     if result.deleted_count == 1:
         return
-    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
-                        detail="Loan not found")
+    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Loan not found")
 
 
 @router.delete("/", response_model=int, status_code=status.HTTP_200_OK)
@@ -154,7 +154,7 @@ async def delete_all_loan(
     loanDate: Optional[str] = None,
     returnDate: Optional[str] = None,
     book_id: Optional[str] = None,
-    adherent_id: Optional[str] = None
+    adherent_id: Optional[str] = None,
 ):
     """
     Deletes all loans matching the provided filters.
@@ -164,28 +164,30 @@ async def delete_all_loan(
     if loanDate:
         if re.match("^[0-9]{4}-[0-1][0-9]-[0-9]{2}$", f"{loanDate}"):
             raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid loan date format")
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Invalid loan date format",
+            )
         query["loanDate"] = loanDate
 
     if returnDate:
         if re.match("^[0-9]{4}-[0-1][0-9]-[0-9]{2}$", f"{returnDate}"):
             raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid return date format")
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Invalid return date format",
+            )
         query["returnDate"] = returnDate
 
     if book_id:
         try:
             query["book_id"] = ObjectId(book_id)
         except Exception:
-            raise HTTPException(
-                status_code=400, detail="Invalid book_id format")
+            raise HTTPException(status_code=400, detail="Invalid book_id format")
 
     if adherent_id:
         try:
             query["adherent_id"] = ObjectId(adherent_id)
         except Exception:
-            raise HTTPException(
-                status_code=400, detail="Invalid adherent_id format")
+            raise HTTPException(status_code=400, detail="Invalid adherent_id format")
 
     result = await loans_collection.delete_many(query)
     if result.deleted_count >= 1:
