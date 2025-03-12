@@ -1,5 +1,5 @@
-from bson import ObjectId
 from app.database import adherents_collection, loans_collection
+from bson import ObjectId
 
 
 async def find_by_id(adherent_id: str) -> dict:

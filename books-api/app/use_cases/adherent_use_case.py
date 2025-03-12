@@ -1,8 +1,9 @@
+from datetime import timedelta
+
+from app.auth import ACCESS_TOKEN_EXPIRE_MINUTES, create_access_token
 from app.repositories import adherent_repository
 from app.schemas import AdherentCreate
 from passlib.context import CryptContext
-from datetime import timedelta
-from app.auth import create_access_token, ACCESS_TOKEN_EXPIRE_MINUTES
 
 
 async def create_adherent_use_case(adherent_data: AdherentCreate) -> dict:

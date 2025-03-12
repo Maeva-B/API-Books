@@ -1,7 +1,8 @@
-from fastapi import APIRouter, HTTPException, status
 from typing import List, Optional
+
 from app.schemas import Author, AuthorCreate
 from app.use_cases import authors_use_case
+from fastapi import APIRouter, HTTPException, status
 
 router = APIRouter()
 

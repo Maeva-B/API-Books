@@ -1,7 +1,8 @@
-from fastapi import APIRouter, HTTPException, status
 from typing import List, Optional
-from app.schemas import Adherent, AdherentCreate, LoginRequest, Token, Loan
+
+from app.schemas import Adherent, AdherentCreate, Loan, LoginRequest, Token
 from app.use_cases import adherent_use_case
+from fastapi import APIRouter, HTTPException, status
 
 router = APIRouter()
 

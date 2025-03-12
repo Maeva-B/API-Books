@@ -1,9 +1,10 @@
-from fastapi import APIRouter, HTTPException, status
-from bson import ObjectId
+import re
+from typing import List, Optional
+
 from app.database import loans_collection
 from app.schemas import Loan, LoanCreate
-from typing import List, Optional
-import re
+from bson import ObjectId
+from fastapi import APIRouter, HTTPException, status
 
 router = APIRouter()
 

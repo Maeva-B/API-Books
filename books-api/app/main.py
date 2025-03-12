@@ -1,9 +1,9 @@
 """Main program of the API. Manage roots and web server"""
 
-from fastapi import FastAPI
-from app.endpoints import books, loans
-from fastapi.middleware.cors import CORSMiddleware
 from app.controllers import adherent_controller, authors_controller
+from app.endpoints import books, loans
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI(
     title="Books API",

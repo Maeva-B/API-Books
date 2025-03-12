@@ -1,9 +1,9 @@
 from datetime import datetime, timedelta
 from typing import Optional
-from jose import jwt
 
 # importer secret_key de secret_key.py
 from app.secret_key import SECRET_KEY
+from jose import jwt
 
 # Normally, the secret key should be kept secret and ideally loaded from an environment variable
 # But to simplify, we are hardcoding it here
