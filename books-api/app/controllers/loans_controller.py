@@ -1,5 +1,5 @@
-from typing import List, Optional
 import re
+from typing import List, Optional
 
 from app.schemas import Loan, LoanCreate
 from app.use_cases import loans_use_case
