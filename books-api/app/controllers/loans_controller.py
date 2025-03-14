@@ -65,10 +65,10 @@ async def get_loans(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Invalid loan date format",
         )
-    if loanDate and not re.match("^[0-9]{4}-[0-1][0-9]-[0-9]{2}$", f"{returnDate}"):
+    if returnDate and not re.match("^[0-9]{4}-[0-1][0-9]-[0-9]{2}$", f"{returnDate}"):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Invalid loan date format",
+            detail="Invalid return date format",
         )
     loans = await loans_use_case.list_loans_use_case(
         loanDate, returnDate, book_id, adherent_id, skip, limit
@@ -190,12 +190,12 @@ async def delete_all_loan(
     **Response:**
     HTTP 204 No Content
     """
-    if not re.match("^[0-9]{4}-[0-1][0-9]-[0-9]{2}$", f"{loanDate}"):
+    if loanDate and not re.match("^[0-9]{4}-[0-1][0-9]-[0-9]{2}$", f"{loanDate}"):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Invalid loan date format",
         )
-    if not re.match("^[0-9]{4}-[0-1][0-9]-[0-9]{2}$", f"{returnDate}"):
+    if returnDate and not re.match("^[0-9]{4}-[0-1][0-9]-[0-9]{2}$", f"{returnDate}"):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Invalid loan date format",

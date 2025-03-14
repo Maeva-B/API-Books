@@ -82,7 +82,6 @@ async def delete_loan_use_case(loan_id: str) -> bool:
     return deleted_count == 1
 
 async def delete_all_loan_use_case(
-        loan_id: str,
         loanDate: str = None,
         returnDate: str = None,
         book_id: str = None,
@@ -98,6 +97,6 @@ async def delete_all_loan_use_case(
     if adherent_id:
         query["adherent_id"] = ObjectId(adherent_id)
     
-    deleted_count = await loans_repository.delete_all_loan(loan_id)
+    deleted_count = await loans_repository.delete_all_loan(query)
     return deleted_count >= 1
 
