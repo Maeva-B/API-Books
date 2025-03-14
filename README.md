@@ -191,7 +191,15 @@ To execute the tests:
 3. Ensure the API is running (`uvicorn` or Docker).
 4. Run the collection or individual requests to validate API behavior.
 
+#### Troubleshooting:
+
+- If the provided link does not work, you can rejoin our **Postman team workspace** using the following invite link:  
+  🔗 **[Join the Team](https://app.getpostman.com/join-team?invite_code=37fdca8521b31c03c0c384b1cb3dd8810cd474e0ea16e98cac72abc404d796ff)**
+
+
 These tests cover various endpoints to ensure the correct functionality of CRUD operations.
+
+
 
 
 ### Running Linters
