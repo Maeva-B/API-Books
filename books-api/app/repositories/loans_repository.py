@@ -1,6 +1,7 @@
 from app.database import loans_collection
 from bson import ObjectId
 
+
 async def find_by_id(loan_id: str) -> dict:
     try:
         oid = ObjectId(loan_id)
@@ -36,9 +37,10 @@ async def delete_loan(loan_id: str) -> int:
     result = await loans_collection.delete_one({"_id": oid})
     return result.deleted_count
 
+
 async def delete_all_loan(
         query: dict,
         ) -> int:
-    
+
     result = await loans_collection.delete_many(query)
     return result.deleted_count

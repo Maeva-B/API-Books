@@ -166,7 +166,6 @@ async def delete_loan(loan_id: str):
     )
 
 
-
 @router.delete(
     "/",
     status_code=status.HTTP_204_NO_CONTENT,
@@ -200,7 +199,8 @@ async def delete_all_loan(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Invalid loan date format",
         )
-    success = await loans_use_case.delete_all_loan_use_case(loanDate, returnDate, book_id, adherent_id)
+    success = await loans_use_case.delete_all_loan_use_case(
+        loanDate, returnDate, book_id, adherent_id)
     if success:
         return  # HTTP 204 No Content
     raise HTTPException(

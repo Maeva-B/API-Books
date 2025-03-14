@@ -68,7 +68,7 @@ async def get_books(
 
     **Example Request:**
     ```
-    GET http://localhost:8000/books/?title=Introduction%20to%20Data%20Science&location=Shelf%20A1&type=datascience&skip=0&limit=10
+    GET /books/?title=Introduction%20to%20Data%20Science&location=Shelf%20A1&skip=0&limit=10
     ```
     """
     books = await books_use_case.list_books_use_case(
@@ -109,7 +109,7 @@ async def create_book(book: BookCreate):
     POST /books
     {
         "title": "Introduction to Data Science",
-        "description": "This course covers the fundamental concepts of data science, including data analysis, machine learning, and data visualization techniques.",
+        "description":"This course covers the fundamental concepts of data science.",
         "location": "Online",
         "label": "Data Science, Learning",
         "type": "datascience",
@@ -141,7 +141,7 @@ async def update_book(book_id: str, book: BookCreate):
     PUT /books/60b725f10c9f1e23d8f3a3e9
      {
         "title": "Introduction to Data Science",
-        "description": "This course covers the fundamental concepts of data science, including data analysis, machine learning, and data visualization techniques.",
+        "description":"This course covers the fundamental concepts of data science.",
         "location": "Shelf A5",
         "label": "Data Science, Learning",
         "type": "datascience",

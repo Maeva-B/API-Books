@@ -27,7 +27,7 @@ async def list_loans_use_case(
         query["book_id"] = ObjectId(book_id)
     if adherent_id:
         query["adherent_id"] = ObjectId(adherent_id)
-    
+
     loans = await loans_repository.find_all(query, skip, limit)
     for loan in loans:
         loan["id"] = str(loan["_id"])
@@ -60,7 +60,7 @@ async def update_loan_use_case(loan_id: str, loan_data: LoanCreate) -> dict:
     loan_doc["returnDate"] = loan_doc["returnDate"].isoformat()
 
     modified_count = await loans_repository.update_loan(loan_id, loan_doc)
-    
+
     if modified_count == 1:
         updated_loan = await loans_repository.find_by_id(loan_id)
         if updated_loan:
@@ -81,12 +81,13 @@ async def delete_loan_use_case(loan_id: str) -> bool:
     deleted_count = await loans_repository.delete_loan(loan_id)
     return deleted_count == 1
 
+
 async def delete_all_loan_use_case(
-        loanDate: str = None,
-        returnDate: str = None,
-        book_id: str = None,
-        adherent_id: str = None,                         
-    ) -> bool:
+    loanDate: str = None,
+    returnDate: str = None,
+    book_id: str = None,
+    adherent_id: str = None,
+) -> bool:
     query = {}
     if loanDate:
         query["loanDate"] = loanDate
@@ -96,7 +97,6 @@ async def delete_all_loan_use_case(
         query["book_id"] = ObjectId(book_id)
     if adherent_id:
         query["adherent_id"] = ObjectId(adherent_id)
-    
+
     deleted_count = await loans_repository.delete_all_loan(query)
     return deleted_count >= 1
-

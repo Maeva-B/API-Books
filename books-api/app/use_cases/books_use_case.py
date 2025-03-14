@@ -13,7 +13,7 @@ async def get_book_use_case(book_id: str) -> dict:
 
 
 async def list_books_use_case(
-    title: str = None, 
+    title: str = None,
     description: str = None,
     location: str = None,
     label: str = None,
@@ -47,7 +47,7 @@ async def list_books_use_case(
         query["link"] = {"$regex": rf"{link}", "$options": "i"}
     if author_id:
         query["author_id"] = author_id
-    
+
     books = await books_repository.find_all(query, skip, limit)
     for book in books:
         book["id"] = str(book["_id"])
