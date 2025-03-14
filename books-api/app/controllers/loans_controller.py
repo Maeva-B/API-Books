@@ -27,9 +27,7 @@ async def get_loan(loan_id: str):
     loan = await loans_use_case.get_loan_use_case(loan_id)
     if loan:
         return loan
-    raise HTTPException(
-        status_code=status.HTTP_404_NOT_FOUND, detail="loan not found"
-    )
+    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="loan not found")
 
 
 @router.get(
@@ -75,9 +73,7 @@ async def get_loans(
     )
     if loans:
         return loans
-    raise HTTPException(
-        status_code=status.HTTP_404_NOT_FOUND, detail="No loans found"
-    )
+    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="No loans found")
 
 
 @router.post(
@@ -136,9 +132,7 @@ async def update_loan(loan_id: str, loan: LoanCreate):
     updated_loan = await loans_use_case.update_loan_use_case(loan_id, loan)
     if updated_loan:
         return updated_loan
-    raise HTTPException(
-        status_code=status.HTTP_404_NOT_FOUND, detail="loan not found"
-    )
+    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="loan not found")
 
 
 @router.delete(
@@ -161,9 +155,7 @@ async def delete_loan(loan_id: str):
     success = await loans_use_case.delete_loan_use_case(loan_id)
     if success:
         return  # HTTP 204 No Content
-    raise HTTPException(
-        status_code=status.HTTP_404_NOT_FOUND, detail="loan not found"
-    )
+    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="loan not found")
 
 
 @router.delete(
@@ -200,9 +192,8 @@ async def delete_all_loan(
             detail="Invalid loan date format",
         )
     success = await loans_use_case.delete_all_loan_use_case(
-        loanDate, returnDate, book_id, adherent_id)
+        loanDate, returnDate, book_id, adherent_id
+    )
     if success:
         return  # HTTP 204 No Content
-    raise HTTPException(
-        status_code=status.HTTP_404_NOT_FOUND, detail="loan not found"
-    )
+    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="loan not found")

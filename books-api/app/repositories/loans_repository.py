@@ -39,8 +39,7 @@ async def delete_loan(loan_id: str) -> int:
 
 
 async def delete_all_loan(
-        query: dict,
-        ) -> int:
-
+    query: dict,
+) -> int:
     result = await loans_collection.delete_many(query)
     return result.deleted_count

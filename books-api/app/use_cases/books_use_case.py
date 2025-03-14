@@ -24,7 +24,7 @@ async def list_books_use_case(
     link: str = None,
     author_id: str = None,
     skip: int = 0,
-    limit: int = 10
+    limit: int = 10,
 ) -> list:
     query = {}
     if title:

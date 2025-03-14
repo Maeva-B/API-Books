@@ -26,9 +26,7 @@ async def get_book(book_id: str):
     book = await books_use_case.get_book_use_case(book_id)
     if book:
         return book
-    raise HTTPException(
-        status_code=status.HTTP_404_NOT_FOUND, detail="Book not found"
-    )
+    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Book not found")
 
 
 @router.get(
@@ -72,14 +70,22 @@ async def get_books(
     ```
     """
     books = await books_use_case.list_books_use_case(
-        title, description, location, label, type, publishDate,
-        publisher, language, link, author_id, skip, limit
+        title,
+        description,
+        location,
+        label,
+        type,
+        publishDate,
+        publisher,
+        language,
+        link,
+        author_id,
+        skip,
+        limit,
     )
     if books:
         return books
-    raise HTTPException(
-        status_code=status.HTTP_404_NOT_FOUND, detail="No books found"
-    )
+    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="No books found")
 
 
 @router.post(
@@ -90,36 +96,36 @@ async def get_books(
 )
 async def create_book(book: BookCreate):
     """
-    Create a new book.
+     Create a new book.
 
-    **Request Body:**
-   - **title**: book's title.
-    - **description**: book's description.
-    - **location**: book's location.
-    - **label**: book's label.
-    - **type**: book's type.
-    - **publishDate**: book's publication date.
-    - **publisher**: book's publisher.
-    - **language**: book's language.
-    - **link**: book's link.
-    - **author_id**: book's author.
+     **Request Body:**
+    - **title**: book's title.
+     - **description**: book's description.
+     - **location**: book's location.
+     - **label**: book's label.
+     - **type**: book's type.
+     - **publishDate**: book's publication date.
+     - **publisher**: book's publisher.
+     - **language**: book's language.
+     - **link**: book's link.
+     - **author_id**: book's author.
 
-    **Example Request:**
-    ```
-    POST /books
-    {
-        "title": "Introduction to Data Science",
-        "description":"This course covers the fundamental concepts of data science.",
-        "location": "Online",
-        "label": "Data Science, Learning",
-        "type": "datascience",
-        "publishDate": "2025-03-12",
-        "publisher": "Tech Academy",
-        "language": "English",
-        "link": "https://www.techacademy.com/datascience-course",
-        "author_id": "67a9d9fb635513c2db4d794d"
-    }
-    ```
+     **Example Request:**
+     ```
+     POST /books
+     {
+         "title": "Introduction to Data Science",
+         "description":"This course covers the fundamental concepts of data science.",
+         "location": "Online",
+         "label": "Data Science, Learning",
+         "type": "datascience",
+         "publishDate": "2025-03-12",
+         "publisher": "Tech Academy",
+         "language": "English",
+         "link": "https://www.techacademy.com/datascience-course",
+         "author_id": "67a9d9fb635513c2db4d794d"
+     }
+     ```
     """
     created_book = await books_use_case.create_book_use_case(book)
     return created_book
@@ -156,9 +162,7 @@ async def update_book(book_id: str, book: BookCreate):
     updated_book = await books_use_case.update_book_use_case(book_id, book)
     if updated_book:
         return updated_book
-    raise HTTPException(
-        status_code=status.HTTP_404_NOT_FOUND, detail="Book not found"
-    )
+    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Book not found")
 
 
 @router.delete(
@@ -181,9 +185,7 @@ async def delete_book(book_id: str):
     success = await books_use_case.delete_book_use_case(book_id)
     if success:
         return  # HTTP 204 No Content
-    raise HTTPException(
-        status_code=status.HTTP_404_NOT_FOUND, detail="Book not found"
-    )
+    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Book not found")
 
 
 @router.get(

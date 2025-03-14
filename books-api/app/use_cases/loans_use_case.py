@@ -16,7 +16,8 @@ async def list_loans_use_case(
     returnDate: str = None,
     book_id: str = None,
     adherent_id: str = None,
-    skip: int = 0, limit: int = 10
+    skip: int = 0,
+    limit: int = 10,
 ) -> list:
     query = {}
     if loanDate:
