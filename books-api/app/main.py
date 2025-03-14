@@ -1,7 +1,11 @@
 """Main program of the API. Manage roots and web server"""
 
-from app.controllers import (adherent_controller, authors_controller,
-                             books_controller, loans_controller)
+from app.controllers import (
+    adherent_controller,
+    authors_controller,
+    books_controller,
+    loans_controller,
+)
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
