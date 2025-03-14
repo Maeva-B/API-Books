@@ -27,7 +27,6 @@ async def list_books_use_case(
     limit: int = 10
 ) -> list:
     query = {}
-    query = {}
     if title:
         query["title"] = {"$regex": rf"{title}", "$options": "i"}
     if description:
